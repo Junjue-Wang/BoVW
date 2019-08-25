@@ -83,6 +83,7 @@ class SampleGenerator(object):
         np.save(os.path.join(log_dir, feature_dict['filename'].replace('tif', 'npy')), feature_dict)
 
     def generate_cluster_n(self, n_list=[], log_dir=r'../log', restore=True):
+        os.makedirs(log_dir, exist_ok=True)
         if restore:
             print('**Restore Features!**')
             features_plist = glob.glob(os.path.join(log_dir, '*.npy'))
