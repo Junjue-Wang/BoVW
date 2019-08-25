@@ -98,5 +98,5 @@ if __name__ == '__main__':
     train_samples, train_labels, test_samples, test_labels = pg.dataset_generator([30, 30], restore=True)
     svm = SVM({})
     svm.fit(train_samples, train_labels)
-    res = svm.val(test_samples, test_labels, False)
+    res = svm.val(test_samples, test_labels, True)
     print(res['acc'])

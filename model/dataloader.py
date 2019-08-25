@@ -92,7 +92,6 @@ class SampleGenerator(object):
             # self.cluster_n(n_list=n_list)
             for ext in tqdm(self.extractors):
                 self.k_means_dict[ext.__class__.__name__] = joblib.load(ext.__class__.__name__)
-
         else:
             assert len(n_list) == len(self.extractors)
 
@@ -129,8 +128,8 @@ class SampleGenerator(object):
             for ext in self.extractors:
                 features[ext.__class__.__name__].append(feat['features'][ext.__class__.__name__])
 
-        for idx, (k, v) in enumerate(features.items()):
-            k_means = KMeans(init='k-means++', n_clusters=n_list[idx], n_init=10)
+        for idx, (k, v) in tqdm(enumerate(features.items())):
+            k_means = KMeans(init='k-means++', n_clusters=n_list[idx], n_init=20)
             k_means.fit(np.array(v).reshape(-1, self.extractors[idx].dim))
             joblib.dump(k_means, k)
             self.k_means_dict[k] = k_means
@@ -157,7 +156,7 @@ class SampleGenerator(object):
             start_feat_idx += self._n_clusters[idx]
                     # res = v.predict(f_i)
 
-    def dataset_generator(self, n_list=[], k_fold=5, k_for_test=1, restore=True, log_dir=r'../log'):
+    def dataset_generator(self, n_list=[], k_fold=5, k_for_test=3, restore=True, log_dir=r'../log'):
         self.generate_cluster_n(n_list=n_list, restore=restore, log_dir=log_dir)
         self.generate_frequency(log_dir=log_dir)
         train_inds, test_inds = self.k_fold(k_fold, k_for_test)
